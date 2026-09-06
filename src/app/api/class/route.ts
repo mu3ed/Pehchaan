@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { ensureDatabaseInitialized } from "@/lib/db-init";
 import {
   BARRIER_LABELS,
   BARRIER_HINTS,
@@ -10,6 +11,7 @@ import { getSeverityTier } from "@/lib/severity";
 
 // GET /api/class — class overview with children grouped by barrier category
 export async function GET() {
+  await ensureDatabaseInitialized();
   // Get all children with their latest session
   const children = await prisma.child.findMany({
     include: {

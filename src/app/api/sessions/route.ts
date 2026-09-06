@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { ensureDatabaseInitialized } from "@/lib/db-init";
 
 // POST /api/sessions — create a new session
 export async function POST(request: NextRequest) {
+  await ensureDatabaseInitialized();
   const body = await request.json();
   const { childId, gateAnswers, homeLanguage } = body;
 

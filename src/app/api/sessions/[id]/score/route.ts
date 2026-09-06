@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { ensureDatabaseInitialized } from "@/lib/db-init";
 import { scoreSession } from "@/lib/scoring";
 import type { GateAnswer, MatchResponse, RetryResponse, ScoringInput } from "@/types";
 
@@ -8,6 +9,7 @@ export async function POST(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await ensureDatabaseInitialized();
   const { id } = await params;
 
   const session = await prisma.session.findUnique({

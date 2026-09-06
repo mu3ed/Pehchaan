@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { ensureDatabaseInitialized } from "@/lib/db-init";
 
 // GET /api/children — list all children with their latest session
 export async function GET() {
+  await ensureDatabaseInitialized();
   const children = await prisma.child.findMany({
     orderBy: { createdAt: "desc" },
     include: {
@@ -25,6 +27,7 @@ export async function GET() {
 
 // POST /api/children — create a new child
 export async function POST(request: NextRequest) {
+  await ensureDatabaseInitialized();
   const body = await request.json();
   const { name, className, grade, homeLanguage, notes } = body;
 

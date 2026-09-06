@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { ensureDatabaseInitialized } from "@/lib/db-init";
 
 // GET /api/sessions/[id] — get full session
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await ensureDatabaseInitialized();
   const { id } = await params;
   const session = await prisma.session.findUnique({
     where: { id },
@@ -43,6 +45,7 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await ensureDatabaseInitialized();
   const { id } = await params;
   const body = await request.json();
 

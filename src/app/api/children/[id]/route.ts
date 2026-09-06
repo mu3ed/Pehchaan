@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { ensureDatabaseInitialized } from "@/lib/db-init";
 
 // GET /api/children/[id] — get child with all sessions
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await ensureDatabaseInitialized();
   const { id } = await params;
   const child = await prisma.child.findUnique({
     where: { id },
@@ -28,6 +30,7 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await ensureDatabaseInitialized();
   const { id } = await params;
   const body = await request.json();
 
