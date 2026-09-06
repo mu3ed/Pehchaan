@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Child {
+  id           String    @id @default(cuid())
+  name         String
+  className    String?
+  grade        Int?
+  homeLanguage String    @default("Urdu")
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  sessions     Session[]
+}
+
+model Session {
+  id              String    @id @default(cuid())
+  childId         String
+  child           Child     @relation(fields: [childId], references: [id], onDelete: Cascade)
+  startedAt       DateTime  @default(now())
+  completedAt     DateTime?
+
+  gateAnswers     String?   // JSON stringified array
+  homeLanguage    String    @default("Urdu")
+
+  ranTimeSeconds  Float?
+  ranTotalTaps    Int?
+  ranMissedTiles  Int       @default(0)
+
+  matchResponses  String?   // JSON stringified array
+  retryResponses  String?   // JSON stringified array
+
+  barrierCategory String    @default("no_concerns")
+  computedActions String?   // JSON stringified array
+  referralFlag    Boolean   @default(false)
+
+  teacherNotes    String?
+}

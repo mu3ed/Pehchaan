@@ -1,26 +1,279 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   PEHCHAAN — Global styles
+   Two design systems:
+     Teacher mode: calm / clinical / trustworthy
+     Child mode:   warm / game-like / high contrast
+   ============================================================ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+      Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Urdu Nastaliq typography — outside @layer so Tailwind v4 never purges it */
+.ur {
+  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu",
+    "Jameel Noori Nastaleeq", "Alvi Nastaleeq", "Urdu Typesetting",
+    "Nastaliq", "Geeza Pro", serif;
+  direction: rtl;
+  unicode-bidi: isolate;
+  line-height: 2.1;
+  font-feature-settings: "liga" 1;
+}
+
+/* Large Nastaliq glyph display (for letter cards) */
+.glyph {
+  font-size: 72px;
+  line-height: 2.6;
+  transform: translateY(-0.39em);
+}
+
+/* ─── Animations ─── */
+
+/* Screen entry */
+@keyframes scrIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Mascot breathing */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1.5deg);
+  }
+}
+
+/* Mascot happy bounce */
+@keyframes pop {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  35% {
+    transform: scale(1.16) translateY(-13px) rotate(-7deg);
+  }
+  70% {
+    transform: scale(0.97) translateY(2px) rotate(4deg);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Mascot thinking tilt */
+@keyframes tilt {
+  0%,
+  100% {
+    transform: rotate(-9deg);
+  }
+  50% {
+    transform: rotate(9deg);
+  }
+}
+
+/* RAN tile hit pop */
+@keyframes hitPop {
+  0% {
+    transform: scale(0.86);
+  }
+  55% {
+    transform: scale(1.13);
+  }
+  100% {
+    transform: scale(1.03);
+  }
+}
+
+/* First tile pulse */
+@keyframes firstPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.42);
+  }
+  60% {
+    box-shadow: 0 0 0 12px rgba(139, 92, 246, 0);
+  }
+}
+
+/* Stone progress pulse */
+@keyframes stonePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 5px rgba(139, 92, 246, 0.16);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(139, 92, 246, 0.05);
+  }
+}
+
+/* Card entry */
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.93);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Card exit */
+@keyframes cardOut {
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(-10px);
+  }
+}
+
+/* Bubble entry */
+@keyframes bubIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Star pop */
+@keyframes starPop {
+  0% {
+    transform: scale(0.3) rotate(-40deg);
+  }
+  60% {
+    transform: scale(1.3) rotate(8deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Confetti fly */
+@keyframes fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.35);
+  }
+}
+
+/* Spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dot appear */
+@keyframes ddIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Ring pulse */
+@keyframes ringp {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 122, 47, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(255, 122, 47, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 122, 47, 0);
+  }
+}
+
+/* Wobble for wrong answer */
+@keyframes wob {
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  80% {
+    transform: translateX(4px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-6px);
+  }
+  40%,
+  60% {
+    transform: translateX(6px);
+  }
+}
+
+/* Sparkle */
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* Chosen flash */
+@keyframes chosen {
+  0% {
+    filter: brightness(1);
+  }
+  45% {
+    filter: brightness(1.28);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* Keyed highlight */
+@keyframes keyed {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: scale(1.06) translateY(-3px);
+  }
 }
