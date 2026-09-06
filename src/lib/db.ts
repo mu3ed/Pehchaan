@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 const databaseUrl =
-  process.env.DATABASE_URL || "file:/tmp/pehchaan.db";
+  process.env.DATABASE_URL || "file:./dev.db";
 
 export const prisma = globalForPrisma.prisma ?? new PrismaClient({
   datasourceUrl: databaseUrl,

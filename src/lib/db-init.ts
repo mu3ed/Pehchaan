@@ -12,7 +12,7 @@ export async function ensureDatabaseInitialized(): Promise<void> {
       return;
     } catch (error) {
       const initClient = new PrismaClient({
-        datasourceUrl: process.env.DATABASE_URL || "file:/tmp/pehchaan.db",
+        datasourceUrl: process.env.DATABASE_URL || "file:./dev.db",
       });
 
       try {
