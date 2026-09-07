@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
 
-// GET /api/sessions/[id] — get full session
+// GET /api/sessions/[id] — get full session (scoped to user)
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   await ensureDatabaseInitialized();
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
-  const session = await prisma.session.findUnique({
-    where: { id },
-    include: {
-      child: true,
-    },
+  const session = await prisma.session.findFirst({
+    where: { id, child: { userId } },
+    include: { child: true },
   });
 
   if (!session) {
@@ -40,15 +44,28 @@ export async function GET(
   return NextResponse.json(parsed);
 }
 
-// PATCH /api/sessions/[id] — update session (add task data progressively)
+// PATCH /api/sessions/[id] — update session (scoped to user)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   await ensureDatabaseInitialized();
-  const { id } = await params;
-  const body = await request.json();
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
+  const { id } = await params;
+
+  // Verify ownership
+  const existing = await prisma.session.findFirst({
+    where: { id, child: { userId } },
+  });
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const body = await request.json();
   const data: Record<string, unknown> = {};
 
   if (body.gateAnswers !== undefined) {

@@ -1,19 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
 import { scoreSession } from "@/lib/scoring";
 import type { GateAnswer, MatchResponse, RetryResponse, ScoringInput } from "@/types";
 
-// POST /api/sessions/[id]/score — run scoring engine and persist result
+// POST /api/sessions/[id]/score — run scoring engine and persist result (scoped to user)
 export async function POST(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   await ensureDatabaseInitialized();
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
 
-  const session = await prisma.session.findUnique({
-    where: { id },
+  const session = await prisma.session.findFirst({
+    where: { id, child: { userId } },
     include: { child: true },
   });
 

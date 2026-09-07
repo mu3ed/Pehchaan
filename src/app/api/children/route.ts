@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
 
-// GET /api/children — list all children with their latest session
+// GET /api/children — list all children for the current user
 export async function GET() {
   await ensureDatabaseInitialized();
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const children = await prisma.child.findMany({
+    where: { userId },
     orderBy: { createdAt: "desc" },
     include: {
       sessions: {
@@ -25,9 +32,14 @@ export async function GET() {
   return NextResponse.json(children);
 }
 
-// POST /api/children — create a new child
+// POST /api/children — create a new child for the current user
 export async function POST(request: NextRequest) {
   await ensureDatabaseInitialized();
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await request.json();
   const { name, className, grade, homeLanguage, notes } = body;
 
@@ -40,6 +52,7 @@ export async function POST(request: NextRequest) {
 
   const child = await prisma.child.create({
     data: {
+      userId,
       name: name.trim(),
       className: className || null,
       grade: grade ? Number(grade) : null,

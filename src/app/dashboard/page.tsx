@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -27,6 +29,8 @@ interface ChildWithSession {
 }
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const { user, isLoaded } = useUser();
   const { language, t } = useLanguage();
   const [children, setChildren] = useState<ChildWithSession[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +38,38 @@ export default function DashboardPage() {
   const [newName, setNewName] = useState("");
   const [newClass, setNewClass] = useState("");
   const [newLang, setNewLang] = useState("Urdu");
+
+  // Check if user has seen the about page; if not, redirect there
+  useEffect(() => {
+    if (!isLoaded) return;
+    if (!user) return;
+
+    let cancelled = false;
+
+    // Fetch profile to check hasSeenAbout
+    fetch("/api/profile")
+      .then((res) => {
+        if (res.status === 404) {
+          // No profile yet — new user, show about page
+          if (!cancelled) router.replace("/about");
+          return null;
+        }
+        return res.json();
+      })
+      .then((profile) => {
+        if (cancelled || !profile) return;
+        if (!profile.hasSeenAbout) {
+          router.replace("/about");
+        }
+      })
+      .catch(() => {
+        // If profile fetch fails, let the page load normally
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isLoaded, user, router]);
 
   const fetchChildren = async () => {
     const res = await fetch("/api/children");

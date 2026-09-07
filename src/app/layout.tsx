@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Nastaliq_Urdu } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import { AppShell } from "@/components/layout/AppShell";
 import "./globals.css";
 
@@ -18,20 +19,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${notoNastaliq.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-[#F6F8FA] text-[#131A23]">
-        {/* Pre-warm Nastaliq font so first Urdu text never flashes a fallback */}
-        <span
-          className="ur absolute opacity-0 pointer-events-none text-[8px]"
-          aria-hidden="true"
-        >
-          بتثجچ
-        </span>
-        <AppShell>{children}</AppShell>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang="en"
+        className={`${notoNastaliq.variable} h-full antialiased`}
+      >
+        <body className="min-h-full flex flex-col bg-[#F6F8FA] text-[#131A23]">
+          {/* Pre-warm Nastaliq font so first Urdu text never flashes a fallback */}
+          <span
+            className="ur absolute opacity-0 pointer-events-none text-[8px]"
+            aria-hidden="true"
+          >
+            بتثجچ
+          </span>
+          <AppShell>{children}</AppShell>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

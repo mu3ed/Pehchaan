@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
 import {
@@ -9,11 +10,17 @@ import {
 import type { ClassGroup, BarrierCategory, GateAnswer } from "@/types";
 import { getSeverityTier } from "@/lib/severity";
 
-// GET /api/class — class overview with children grouped by barrier category
+// GET /api/class — class overview with children grouped by barrier category (scoped to user)
 export async function GET() {
   await ensureDatabaseInitialized();
-  // Get all children with their latest session
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Get all children for this user with their latest session
   const children = await prisma.child.findMany({
+    where: { userId },
     include: {
       sessions: {
         orderBy: { startedAt: "desc" },

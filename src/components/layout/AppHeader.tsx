@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { UserButton } from "@clerk/nextjs";
 import { useLanguage } from "@/lib/i18n/context";
 
 export function AppHeader() {
@@ -55,6 +56,13 @@ export function AppHeader() {
               {t("nav.english")}
             </button>
           </div>
+          <UserButton
+            appearance={{
+              elements: {
+                userButtonAvatarBox: "w-8 h-8",
+              },
+            }}
+          />
         </nav>
       </div>
     </header>

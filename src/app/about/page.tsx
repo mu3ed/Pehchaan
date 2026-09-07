@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/Button";
 import { useLanguage } from "@/lib/i18n/context";
 
@@ -80,7 +81,8 @@ function AboutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const step = (searchParams.get("step") === "2" ? 2 : 1) as 1 | 2;
-  const { t, language, completeFirstLaunch } = useLanguage();
+  const { t, language } = useLanguage();
+  const { user } = useUser();
   const isUrdu = language === "ur";
 
   // ── Vision interaction ──
@@ -199,8 +201,23 @@ function AboutContent() {
 
   const goToStep2 = () => router.push("/about?step=2");
   const goBackToStep1 = () => router.push("/about");
-  const goToDashboard = () => {
-    completeFirstLaunch();
+  const goToDashboard = async () => {
+    // Create/update user profile and mark about page as seen
+    if (user) {
+      await fetch("/api/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: user.emailAddresses[0]?.emailAddress || "",
+          fullName: user.fullName,
+        }),
+      });
+      await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hasSeenAbout: true }),
+      });
+    }
     router.push("/dashboard");
   };
 
