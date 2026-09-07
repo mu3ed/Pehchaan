@@ -3,17 +3,31 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
 
-// GET /api/profile — get current user's profile
-export async function GET() {
+// GET /api/profile — get current user's profile (auto-creates if missing)
+export async function GET(request: NextRequest) {
   await ensureDatabaseInitialized();
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const profile = await prisma.userProfile.findUnique({
+  let profile = await prisma.userProfile.findUnique({
     where: { clerkUserId: userId },
   });
+
+  // Auto-create profile if it doesn't exist yet (e.g. user signed up but hasn't
+  // completed the about page). This ensures API calls that reference userId work.
+  if (!profile) {
+    const email =
+      request.nextUrl.searchParams.get("email") ||
+      `${userId}@clerk.user`;
+    profile = await prisma.userProfile.create({
+      data: {
+        clerkUserId: userId,
+        email,
+      },
+    });
+  }
 
   return NextResponse.json(profile);
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
+import { ensureUserProfile } from "@/lib/auth";
 
 // GET /api/sessions/[id] — get full session (scoped to user)
 export async function GET(
@@ -9,10 +9,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   await ensureDatabaseInitialized();
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await ensureUserProfile();
 
   const { id } = await params;
   const session = await prisma.session.findFirst({
@@ -50,10 +47,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   await ensureDatabaseInitialized();
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await ensureUserProfile();
 
   const { id } = await params;
 

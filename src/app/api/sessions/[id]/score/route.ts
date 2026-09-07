@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
+import { ensureUserProfile } from "@/lib/auth";
 import { scoreSession } from "@/lib/scoring";
 import type { GateAnswer, MatchResponse, RetryResponse, ScoringInput } from "@/types";
 
@@ -11,10 +11,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   await ensureDatabaseInitialized();
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await ensureUserProfile();
 
   const { id } = await params;
 

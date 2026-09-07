@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
+import { ensureUserProfile } from "@/lib/auth";
 
 // POST /api/sessions — create a new session (scoped to user)
 export async function POST(request: NextRequest) {
   await ensureDatabaseInitialized();
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await ensureUserProfile();
 
   const body = await request.json();
   const { childId, gateAnswers, homeLanguage } = body;

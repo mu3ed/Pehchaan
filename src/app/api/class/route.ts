@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { ensureDatabaseInitialized } from "@/lib/db-init";
+import { ensureUserProfile } from "@/lib/auth";
 import {
   BARRIER_LABELS,
   BARRIER_HINTS,
@@ -13,10 +13,7 @@ import { getSeverityTier } from "@/lib/severity";
 // GET /api/class — class overview with children grouped by barrier category (scoped to user)
 export async function GET() {
   await ensureDatabaseInitialized();
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await ensureUserProfile();
 
   // Get all children for this user with their latest session
   const children = await prisma.child.findMany({
