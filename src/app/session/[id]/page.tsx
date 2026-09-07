@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { GATE_QUESTIONS } from "@/content/gate-questions";
 import { RAN_ICONS, getShuffledGrid } from "@/content/ran-icons";
 import { selectPairs } from "@/content/letter-pairs";
@@ -470,8 +471,8 @@ export default function SessionPage() {
 
   if (loading) {
     return (
-      <div className="flex-1 bg-[#F6F8FA] min-h-screen flex items-center justify-center text-[#6B7686]">
-        Loading session...
+      <div className="flex-1 bg-[#F6F8FA] min-h-screen flex items-center justify-center">
+        <LoadingSpinner text="Loading session..." />
       </div>
     );
   }

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Chip } from "@/components/ui/Chip";
 import { Field } from "@/components/ui/Field";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { BARRIER_COPY } from "@/lib/i18n/strings";
 import { useLanguage } from "@/lib/i18n/context";
 import { getSeverityTier } from "@/lib/severity";
@@ -191,7 +192,7 @@ export default function DashboardPage() {
 
         {/* Children list */}
         {loading ? (
-          <div className="text-center text-[#6B7686] py-12">{t("common.loading")}</div>
+          <LoadingSpinner />
         ) : children.length === 0 ? (
           <Card className="text-center py-8">
             <div className="text-[#6B7686] text-[14px]">

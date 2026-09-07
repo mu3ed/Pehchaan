@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Chip } from "@/components/ui/Chip";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { BARRIER_COPY } from "@/lib/i18n/strings";
 import { useLanguage } from "@/lib/i18n/context";
 import { getSeverityTier } from "@/lib/severity";
@@ -68,8 +69,8 @@ export default function ChildDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex-1 bg-[#F6F8FA] min-h-screen flex items-center justify-center text-[#6B7686]">
-        {t("common.loading")}
+      <div className="flex-1 bg-[#F6F8FA] min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
       </div>
     );
   }
