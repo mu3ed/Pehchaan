@@ -17,9 +17,7 @@
 
 /* Urdu Nastaliq typography — outside @layer so Tailwind v4 never purges it */
 .ur {
-  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu",
-    "Jameel Noori Nastaleeq", "Alvi Nastaleeq", "Urdu Typesetting",
-    "Nastaliq", "Geeza Pro", serif;
+  font-family: var(--font-nastaliq);
   direction: rtl;
   unicode-bidi: isolate;
   line-height: 2.1;
