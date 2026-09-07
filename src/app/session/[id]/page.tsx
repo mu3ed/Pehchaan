@@ -939,17 +939,17 @@ function TeachStep({
           </SpeechBubble>
         </div>
 
-        <h2 className="text-[22px] font-extrabold text-[#2B1F42] text-center">
+        <h2 className={`text-[22px] font-extrabold text-[#2B1F42] text-center ${language === "ur" ? "ur" : ""}`}>
           {language === "ur" ? card.titleUrdu : card.titleEnglish}
         </h2>
-        <p className="text-[14px] font-semibold text-[#5B4C79] text-center">
+        <p className={`text-[14px] font-semibold text-[#5B4C79] text-center ${language === "ur" ? "ur" : ""}`}>
           {text(card.explanation)}
         </p>
 
         {/* Teach cards */}
         <div className="flex items-stretch gap-3">
           <div className="flex-1 bg-white border-[3px] border-[#EFE6FA] rounded-[24px] flex flex-col items-center gap-0 py-3 min-h-[186px] shadow-[0_6px_0_rgba(139,92,246,.13)] animate-[cardIn_.42s_cubic-bezier(.2,1.2,.35,1)_both]">
-            <span className="text-[12px] font-extrabold text-[#6B7686] mt-1">
+            <span className={`text-[12px] font-extrabold text-[#6B7686] mt-1 ${language === "ur" ? "ur" : ""}`}>
               {text(card.aDotDescription)}
             </span>
             <div className="flex-1 grid place-items-center">
@@ -960,7 +960,7 @@ function TeachStep({
           </div>
           <div className="self-center text-[13px] font-extrabold text-[#7C6F94] flex-none" />
           <div className="flex-1 bg-white border-[3px] border-[#EFE6FA] rounded-[24px] flex flex-col items-center gap-0 py-3 min-h-[186px] shadow-[0_6px_0_rgba(139,92,246,.13)] animate-[cardIn_.42s_cubic-bezier(.2,1.2,.35,1)_both] [animation-delay:.08s]">
-            <span className="text-[12px] font-extrabold text-[#6B7686] mt-1">
+            <span className={`text-[12px] font-extrabold text-[#6B7686] mt-1 ${language === "ur" ? "ur" : ""}`}>
               {text(card.bDotDescription)}
             </span>
             <div className="flex-1 grid place-items-center">

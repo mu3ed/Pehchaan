@@ -171,7 +171,7 @@ export default function DashboardPage() {
                 <select
                   value={newLang}
                   onChange={(e) => setNewLang(e.target.value)}
-                  className="w-full border-[1.5px] border-[#E3E8EF] rounded-[14px] bg-white px-4 py-3 text-[17px] font-semibold text-[#131A23]"
+                  className={`w-full border-[1.5px] border-[#E3E8EF] rounded-[14px] bg-white px-4 py-3 text-[17px] font-semibold text-[#131A23] ${language === "ur" ? "ur" : ""}`}
                 >
                   <option value="Urdu">{language === "ur" ? "اردو" : "Urdu"}</option>
                   <option value="Punjabi">{language === "ur" ? "پنجابی" : "Punjabi"}</option>
