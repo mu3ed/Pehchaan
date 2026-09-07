@@ -3,6 +3,14 @@ import { SignIn } from "@clerk/nextjs";
 export default function SignInPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#F6F8FA] px-4">
+      <div className="mx-auto w-full max-w-md">
+        <h1 className="text-center text-[22px] font-bold text-[#131A23] mb-1">
+          Sign in to Pehchaan
+        </h1>
+        <p className="text-center text-[14px] text-[#6B7686] mb-6">
+          Welcome back! Please sign in to continue
+        </p>
+      </div>
       <SignIn
         path="/sign-in"
         signUpUrl="/sign-up"
@@ -10,8 +18,8 @@ export default function SignInPage() {
           elements: {
             rootBox: "mx-auto w-full max-w-md",
             card: "shadow-xl rounded-2xl border border-[#E3E8EF]",
-            headerTitle: "text-[#131A23]",
-            headerSubtitle: "text-[#6B7686]",
+            headerTitle: "hidden",
+            headerSubtitle: "hidden",
             socialButtonsBlockButton:
               "border-[#D9E1E8] text-[#414D5C] hover:bg-[#F6F8FA]",
             formButtonPrimary:
