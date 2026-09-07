@@ -792,7 +792,7 @@ function MatchStep({
   onStart: () => void;
   onAnswer: (same: boolean) => void;
 }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [locked, setLocked] = useState(false);
 
   const handleAnswer = (same: boolean) => {
@@ -808,7 +808,7 @@ function MatchStep({
         <ProgressPath done={1} />
         <Tara size={126} />
         <SpeechBubble>
-          <span className="ur text-[23px]">{t("match.question")}</span>
+          <span className={`${language === "ur" ? "ur" : ""} text-[23px]`}>{t("match.question")}</span>
         </SpeechBubble>
         <div className="h-1" />
         <h2 className="text-[25px] font-extrabold text-[#2B1F42] text-center leading-tight">
@@ -841,7 +841,7 @@ function MatchStep({
       </div>
       <div className="flex-1 flex flex-col justify-center gap-5 pb-2">
         <p className="text-center text-[14px] font-semibold text-[#5B4C79]">
-          <span className="ur text-[22px]">{t("match.question")}</span>
+          <span className={`${language === "ur" ? "ur" : ""} text-[22px]`}>{t("match.question")}</span>
         </p>
 
         {/* Letter cards */}
@@ -871,7 +871,7 @@ function MatchStep({
               shadow-[0_6px_0_#1B7AB2] active:translate-y-[5px] active:shadow-[0_1px_0_#1B7AB2]
               transition-transform disabled:opacity-50"
           >
-            <span className="ur text-[23px]">{t("match.same")}</span>
+            <span className={`${language === "ur" ? "ur" : ""} text-[23px]`}>{t("match.same")}</span>
           </button>
           <button
             disabled={locked}
@@ -881,7 +881,7 @@ function MatchStep({
               shadow-[0_6px_0_#D95A15] active:translate-y-[5px] active:shadow-[0_1px_0_#D95A15]
               transition-transform disabled:opacity-50"
           >
-            <span className="ur text-[23px]">{t("match.different")}</span>
+            <span className={`${language === "ur" ? "ur" : ""} text-[23px]`}>{t("match.different")}</span>
           </button>
         </div>
       </div>
@@ -1000,7 +1000,7 @@ function TeachStep({
 
       <div className="flex-1 flex flex-col justify-center gap-5 pb-2">
         <p className="text-center text-[14px] font-semibold text-[#5B4C79]">
-          <span className="ur text-[22px]">{t("teach.trick")}</span>
+          <span className={`${language === "ur" ? "ur" : ""} text-[22px]`}>{t("teach.trick")}</span>
         </p>
 
         <div className="flex items-stretch gap-3">
@@ -1038,7 +1038,7 @@ function TeachStep({
               shadow-[0_6px_0_#1B7AB2] active:translate-y-[5px] active:shadow-[0_1px_0_#1B7AB2]
               transition-transform disabled:opacity-50"
           >
-            <span className="ur text-[23px]">{t("teach.same")}</span>
+            <span className={`${language === "ur" ? "ur" : ""} text-[23px]`}>{t("teach.same")}</span>
           </button>
           <button
             disabled={locked}
@@ -1048,7 +1048,7 @@ function TeachStep({
               shadow-[0_6px_0_#D95A15] active:translate-y-[5px] active:shadow-[0_1px_0_#D95A15]
               transition-transform disabled:opacity-50"
           >
-            <span className="ur text-[23px]">{t("teach.different")}</span>
+            <span className={`${language === "ur" ? "ur" : ""} text-[23px]`}>{t("teach.different")}</span>
           </button>
         </div>
       </div>
@@ -1162,7 +1162,7 @@ function ResultStep({
           <span className="grid h-5 w-5 place-items-center rounded-full border-2 border-current text-[11px]">{severityStyles.icon}</span>
           {t(severity.labelKey)}
         </div>
-        <p className={`mt-2 text-[14px] font-semibold leading-relaxed ${severityStyles.color}`}>{t(severity.messageKey)}</p>
+        <p className={`text-[14.5px] leading-relaxed ${language === "ur" ? "ur text-[18px]" : ""} ${severityStyles.color}`}>{t(severity.messageKey)}</p>
       </div>
 
       {/* Header */}
@@ -1212,7 +1212,7 @@ function ResultStep({
             {t("result.wentWell")}
           </span>
         </div>
-        <p className="text-[14.5px] text-[#1F5C41] leading-relaxed">
+        <p className={`text-[14.5px] leading-relaxed ${language === "ur" ? "ur text-[18px]" : ""} text-[#1F5C41]`}>
           {text(summary.wentWell)}
         </p>
       </div>
@@ -1238,15 +1238,15 @@ function ResultStep({
             {t("result.stoodOut")}
           </span>
         </div>
-        <p className="text-[14.5px] text-[#6E4E16] leading-relaxed">
+        <p className={`text-[14.5px] leading-relaxed ${language === "ur" ? "ur text-[18px]" : ""} text-[#6E4E16]`}>
           {text(summary.stoodOut)}
         </p>
-        <p className="text-[14.5px] text-[#6E4E16] font-semibold mt-2 leading-relaxed">
+        <p className={`text-[14.5px] font-semibold mt-2 leading-relaxed ${language === "ur" ? "ur text-[18px]" : ""} text-[#6E4E16]`}>
           {text(summary.teachLine)}
         </p>
       </div>
 
-      <p className="text-[12.5px] text-[#6B7686] mt-3 px-1">{text(summary.languageLine)}</p>
+      <p className={`text-[12.5px] mt-3 px-1 ${language === "ur" ? "ur text-[15px]" : ""} text-[#6B7686]`}>{text(summary.languageLine)}</p>
 
       {/* Actions */}
       <div className="mt-6">
@@ -1262,14 +1262,14 @@ function ResultStep({
           </div>
           <div className="flex-1">
             <div className="flex items-baseline justify-between gap-2">
-              <h3 className="text-[16px] font-bold text-[#131A23] tracking-tight">
+              <h3 className={`text-[16px] font-bold text-[#131A23] tracking-tight ${language === "ur" ? "ur text-[18px]" : ""}`}>
                 {language === "ur" ? action.titleUrdu : action.title}
               </h3>
               <Chip bg="#E7F1F0" color="#1C6B66">
                 {language === "ur" ? action.whenUrdu : action.when}
               </Chip>
             </div>
-            <p className="text-[14px] text-[#414D5C] mt-1 leading-relaxed">
+            <p className={`text-[14px] mt-1 leading-relaxed ${language === "ur" ? "ur text-[17px]" : ""} text-[#414D5C]`}>
               {language === "ur" ? action.descriptionUrdu : action.description}
             </p>
             <span className="ur text-[17px] text-[#1C6B66] mt-1 inline-block">
